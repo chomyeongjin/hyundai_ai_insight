@@ -16,6 +16,7 @@
       --ink: #0b0b0b;
       --paper: #ffffff;
       --placeholder: #d9d9d9;
+      --menu-bg: #d9d9d9;
 
       --f-display: 'Bebas Neue', 'Oswald', Impact, sans-serif;     /* 섹션 제목 */
       --f-serif: 'EB Garamond', 'Times New Roman', serif;           /* 본문 */
@@ -78,31 +79,52 @@
     .brand svg { width: .9em; height: 1.25em; }
 
     .logo {
-      position: relative;
       justify-self: center;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .logo span { display: block; transition: opacity .4s var(--ease); }
-    .logo-display {
-      font-family: var(--f-display);
-      font-size: clamp(34px, 3.2vw, 62px);
-      letter-spacing: .005em;
-    }
-    .logo-serif {
-      position: absolute;
-      inset: 50% auto auto 50%;
-      transform: translate(-50%, -50%);
       font-family: var(--f-logo);
       font-size: clamp(30px, 2.75vw, 53px);
-      transform-origin: center;
+      line-height: 1;
       letter-spacing: -.01em;
+      white-space: nowrap;
       scale: .85 1.1; /* 시안의 좁고 긴 세리프 로고 느낌 */
     }
-    /* 1번 섹션에서는 Bebas 로고, 이후에는 세리프 로고 */
-    .logo-serif { opacity: 0; }
-    body:not([data-section="intro"]) .logo-display { opacity: 0; }
-    body:not([data-section="intro"]) .logo-serif { opacity: 1; }
+
+    /* 헤더 호버 시 내려오는 메뉴 바 */
+    body .site-header:hover,
+    body .site-header:has(:focus-visible) { background: var(--paper); } /* 히어로의 투명 헤더보다 우선 */
+    .menu {
+      position: absolute;
+      top: clamp(76px, 6.875vw, 132px);
+      left: 0;
+      right: 0;
+      height: clamp(40px, 2.85vw, 54px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--menu-bg);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s linear .35s;
+    }
+    .site-header:hover .menu,
+    .site-header:has(:focus-visible) .menu {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition-delay: 0s;
+    }
+    .menu a {
+      width: 17.9vw;
+      text-align: center;
+      font-family: var(--f-display);
+      font-size: clamp(22px, 1.9vw, 36px);
+      line-height: 1;
+      padding-top: .1em;
+      transition: opacity .25s;
+    }
+    .menu:hover a { opacity: .45; }
+    .menu a:hover,
+    .menu a:focus-visible { opacity: 1; }
 
     .book {
       justify-self: end;
@@ -340,8 +362,8 @@
       .site-header { grid-template-columns: auto 1fr auto; column-gap: 12px; }
       .brand .brand-name { display: none; }
       .brand svg { width: 14px; height: 22px; }
-      .logo-display { font-size: 30px; }
-      .logo-serif { font-size: 28px; }
+      .logo { font-size: 28px; }
+      .menu { display: none; } /* 터치 기기에는 호버가 없어 숨김 */
 
       .intro .media { width: min(78vw, 420px); }
 
@@ -392,12 +414,16 @@
       </svg>
     </a>
 
-    <a class="logo" href="#intro" aria-label="The Walker's">
-      <span class="logo-display">THE WALKER’S</span>
-      <span class="logo-serif" aria-hidden="true">THE WALKERS</span>
-    </a>
+    <a class="logo" href="#intro" aria-label="The Walker's">THE WALKERS</a>
 
     <a class="book" href="#">Book Now</a>
+
+    <!-- 헤더에 마우스를 올리면 나타나는 메뉴 (임시로 각 섹션으로 연결) -->
+    <nav class="menu" aria-label="Main">
+      <a href="#intro">Overview</a>
+      <a href="#highlands">The Journeys</a>
+      <a href="#ground">The Lodge</a>
+    </nav>
   </header>
 
   <main>
