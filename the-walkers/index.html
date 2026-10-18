@@ -486,12 +486,14 @@
       const pagedMedia = window.matchMedia('(min-width: 901px)');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const DURATION = 900;      // 섹션 이동 시간(ms)
-      const WHEEL_IDLE = 200;    // 이 시간 동안 휠 입력이 없어야 다음 이동 허용(트랙패드 관성 무시)
+      const COOLDOWN = 150;      // 이동이 끝난 뒤 다음 입력을 받기까지 대기(ms)
+      const WHEEL_GAP = 150;     // 휠 입력이 이만큼 끊기면 새로운 스크롤로 판단(ms)
       const WHEEL_THRESHOLD = 10;
 
       let animating = false;
-      let wheelLocked = false;
-      let wheelTimer = null;
+      let readyAt = 0;           // 이 시각 이후에만 다음 이동 허용
+      let lastWheelAt = 0;
+      let lastDelta = 0;
 
       const sectionTop = (s) => s.getBoundingClientRect().top + window.scrollY;
       const currentIndex = () => {
@@ -517,17 +519,25 @@
           const t = Math.min(1, (now - start) / DURATION);
           window.scrollTo({ top: from + (to - from) * easeInOut(t), behavior: 'instant' });
           if (t < 1) requestAnimationFrame(step);
-          else animating = false;
+          else { animating = false; readyAt = performance.now() + COOLDOWN; }
         })(start);
       }
 
+      // 트랙패드 관성 스크롤은 손을 뗀 뒤에도 점점 작아지는 휠 이벤트를 1~2초간 계속 보냄.
+      // 이 관성 이벤트는 무시하고, 새로운 스크롤(입력이 끊겼다가 다시 시작되거나
+      // delta가 줄지 않고 유지·증가하는 경우)만 다음 이동으로 받는다.
       window.addEventListener('wheel', (e) => {
         if (!pagedMedia.matches || e.ctrlKey) return; // ctrl+휠(확대)은 그대로 둠
         e.preventDefault();
-        clearTimeout(wheelTimer);
-        wheelTimer = setTimeout(() => { wheelLocked = false; }, WHEEL_IDLE);
-        if (animating || wheelLocked || Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
-        wheelLocked = true;
+        const now = performance.now();
+        const delta = Math.abs(e.deltaY);
+        const isNewScroll =
+          now - lastWheelAt > WHEEL_GAP ||           // 잠깐 멈췄다가 다시 스크롤
+          delta > lastDelta * 1.2 ||                 // 관성 도중 새로 스와이프(가속)
+          (delta === lastDelta && delta >= 50);      // 마우스 휠을 계속 굴림(일정한 큰 값)
+        lastWheelAt = now;
+        lastDelta = delta;
+        if (animating || now < readyAt || delta < WHEEL_THRESHOLD || !isNewScroll) return;
         goTo(currentIndex() + (e.deltaY > 0 ? 1 : -1));
       }, { passive: false });
 
