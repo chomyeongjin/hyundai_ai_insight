@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- 폰트는 시안을 보고 고른 근사치입니다. 실제 사용 폰트로 교체하세요. -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+SC:wght@500&family=EB+Garamond:wght@400;500&family=Instrument+Serif&family=Inter:wght@300&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+SC:wght@500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Instrument+Serif&family=Inter:wght@300&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -278,6 +278,46 @@
     .inn .images .media { aspect-ratio: 416 / 305; }
     .inn .engraving img { filter: grayscale(1) sepia(.35) contrast(1.05); }
 
+    /* 6. Ground (Built from the ground) */
+    .ground {
+      display: grid;
+      grid-template-columns: 1fr 45.3vw;
+      column-gap: 4.5vw;
+      padding: calc(var(--header-h) + 2.5vw) var(--gutter) 3.8vw 3.65vw;
+    }
+    .ground .text { align-self: end; }
+    .ground h2,
+    .invitation h2 {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: var(--fs-h2);
+      line-height: .97;
+    }
+    .ground h2 { margin-bottom: 2.1vw; }
+    .ground p {
+      font-size: var(--fs-body);
+      line-height: 1.38;
+      letter-spacing: -.012em;
+    }
+
+    /* 7. Invitation (The Walker's) */
+    .invitation {
+      display: grid;
+      grid-template-columns: 1fr 30.6vw;
+      column-gap: 4vw;
+      padding: calc(var(--header-h) + .7vw) 6vw 4.3vw 6.1vw;
+    }
+    .invitation .text { align-self: end; padding-bottom: 5.4vw; }
+    .invitation h2 { margin-bottom: 2vw; }
+    .invitation p {
+      font-style: italic;
+      font-size: var(--fs-body);
+      line-height: 1.35;
+      letter-spacing: -.012em;
+      padding-left: .65vw;
+    }
+    .invitation .media { aspect-ratio: 588 / 822; }
+
     /* ---------- Scroll reveal ---------- */
     .reveal {
       opacity: 0;
@@ -312,7 +352,9 @@
       .philosophy .copy { margin-top: 36px; }
 
       .highlands,
-      .inn {
+      .inn,
+      .ground,
+      .invitation {
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -328,6 +370,13 @@
       .inn h3 { margin-bottom: 12px; }
       .inn .item + .item { margin-top: 36px; }
       .inn .images { gap: 16px; margin-top: 24px; }
+
+      .ground h2 { margin-bottom: 20px; }
+      .ground .media { aspect-ratio: 869 / 797; margin-top: 24px; }
+      .invitation .text { padding-bottom: 0; }
+      .invitation h2 { margin-bottom: 16px; }
+      .invitation p { padding-left: 0; }
+      .invitation .media { width: 80%; align-self: flex-end; margin-top: 24px; }
     }
   </style>
 </head>
@@ -439,6 +488,38 @@
           <img src="https://picsum.photos/seed/walkers-room/832/610" alt="A room at The Walker's" loading="lazy">
         </figure>
       </div>
+    </section>
+
+    <!-- 6. Built from the ground -->
+    <section id="ground" class="section ground" data-section="ground">
+      <div class="text">
+        <h2 class="reveal">Built from<br>the ground it stands on</h2>
+        <p class="reveal" style="--d:.15s">We translated the Lewisian Gneiss strata<br>
+          of the Northwest Highlands into architectural language.<br>
+          The layered grain of the rock carries through the facade,<br>
+          the circulation and the materials of every room.<br>
+          Each day, guests walk one trail and end the day with a whisky matched to that path.</p>
+      </div>
+
+      <figure class="media reveal" style="margin:0; --d:.1s">
+        <!-- MOCK: 지층 이미지 및 파사드 이미지 (869 x 797) -->
+        <img src="https://picsum.photos/seed/walkers-strata/1738/1594" alt="Lewisian Gneiss strata and the hotel facade inspired by it" loading="lazy">
+        <figcaption class="caption">Strata &amp; Facade</figcaption>
+      </figure>
+    </section>
+
+    <!-- 7. The Walker's (Johnnie Walker's invitation) -->
+    <section id="invitation" class="section invitation" data-section="invitation">
+      <div class="text">
+        <h2 class="reveal">The Walker’s</h2>
+        <p class="reveal" style="--d:.15s">A place to walk, drink, and take a moment to reconnect with oneself before moving forward.<br>
+          A place to pause between journeys, to rest and continue walking once again.</p>
+      </div>
+
+      <figure class="media reveal" style="margin:0; --d:.1s">
+        <!-- MOCK: 블루라벨 보틀 & 글라스 이미지 (588 x 822) -->
+        <img src="https://picsum.photos/seed/walkers-bluelabel/1176/1644" alt="A bottle of Johnnie Walker Blue Label and a glass on a velvet sofa" loading="lazy">
+      </figure>
     </section>
   </main>
 
