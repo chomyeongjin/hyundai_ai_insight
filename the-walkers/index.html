@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Walker's — Johnnie Walker Hotel</title>
+  <meta name="description" content="The Walker's — a Johnnie Walker hotel in the Scottish Highlands.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- 폰트는 시안을 보고 고른 근사치입니다. 실제 사용 폰트로 교체하세요. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+SC:wght@500&family=EB+Garamond:wght@400;500&family=Instrument+Serif&family=Inter:wght@300&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b0b0b;
+      --paper: #ffffff;
+      --placeholder: #d9d9d9;
+
+      --f-display: 'Bebas Neue', 'Oswald', Impact, sans-serif;     /* 섹션 제목 */
+      --f-serif: 'EB Garamond', 'Times New Roman', serif;           /* 본문 */
+      --f-logo: 'Instrument Serif', 'Times New Roman', serif;       /* THE WALKERS 로고 */
+      --f-hero: 'Libre Caslon Display', 'Times New Roman', serif;   /* A SIP OF THE LANDSCAPE */
+      --f-sans: 'Inter', system-ui, sans-serif;                     /* 히어로 서브카피 */
+      --f-brand: 'Cormorant SC', 'Times New Roman', serif;          /* Johnnie Walker 워드마크 */
+
+      /* 1920px 시안 기준 수치를 vw로 환산 */
+      --header-h: clamp(88px, 8.4vw, 162px);
+      --gutter: clamp(20px, 2.35vw, 45px);
+      --fs-h2: clamp(34px, 3.65vw, 70px);
+      --fs-h3: clamp(24px, 2.1vw, 40px);
+      --fs-body: clamp(17px, 1.36vw, 26px);
+      --ease: cubic-bezier(.22, .61, .36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--f-serif);
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, p { margin: 0; }
+
+    /* 이미지가 없거나 로드 실패 시 시안의 회색 박스가 보이도록 */
+    .media { position: relative; overflow: hidden; background: var(--placeholder); }
+    .media img.is-broken { visibility: hidden; }
+
+    /* ---------- Header ---------- */
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 10;
+      height: var(--header-h);
+      padding: 0 var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      background: var(--paper);
+      transition: background-color .4s var(--ease);
+    }
+    body[data-section="hero"] .site-header { background: transparent; }
+
+    .brand {
+      justify-self: start;
+      display: inline-flex;
+      align-items: flex-end;
+      gap: .5em;
+      font-family: var(--f-brand);
+      font-size: clamp(13px, .95vw, 18px);
+      letter-spacing: .06em;
+      padding-top: .6em;
+    }
+    .brand svg { width: .9em; height: 1.25em; }
+
+    .logo {
+      position: relative;
+      justify-self: center;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .logo span { display: block; transition: opacity .4s var(--ease); }
+    .logo-display {
+      font-family: var(--f-display);
+      font-size: clamp(34px, 3.2vw, 62px);
+      letter-spacing: .005em;
+    }
+    .logo-serif {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--f-logo);
+      font-size: clamp(30px, 2.75vw, 53px);
+      transform-origin: center;
+      letter-spacing: -.01em;
+      scale: .85 1.1; /* 시안의 좁고 긴 세리프 로고 느낌 */
+    }
+    /* 1번 섹션에서는 Bebas 로고, 이후에는 세리프 로고 */
+    .logo-serif { opacity: 0; }
+    body:not([data-section="intro"]) .logo-display { opacity: 0; }
+    body:not([data-section="intro"]) .logo-serif { opacity: 1; }
+
+    .book {
+      justify-self: end;
+      font-family: var(--f-serif);
+      font-size: clamp(13px, .95vw, 18px);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding-top: .6em;
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s;
+    }
+    .book:hover { border-color: currentColor; }
+
+    /* ---------- Sections ---------- */
+    .section { position: relative; min-height: 100vh; min-height: 100svh; }
+
+    /* 1. Intro */
+    .intro {
+      display: grid;
+      place-items: center;
+      padding: var(--header-h) var(--gutter) calc(var(--header-h) * .6);
+    }
+    .intro .media {
+      width: min(29.4vw, 564px);
+      aspect-ratio: 564 / 750;
+    }
+
+    /* 2. Hero */
+    .hero {
+      height: 100vh;
+      height: 100svh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3.9vw 6.6vw;
+      overflow: hidden;
+    }
+    .hero .media { position: absolute; inset: 0; z-index: -1; }
+    .hero .media img { filter: saturate(.55) brightness(.85); }
+    .hero .media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 55%);
+    }
+    .hero h1 {
+      font-family: var(--f-hero);
+      font-weight: 400;
+      line-height: .92;
+      letter-spacing: -.01em;
+    }
+    .hero h1 .l1 { display: block; font-size: clamp(48px, 6.3vw, 121px); }
+    .hero h1 .l2 { display: block; font-size: clamp(60px, 8.1vw, 156px); }
+    .hero p {
+      margin-top: 1.9vw;
+      font-family: var(--f-sans);
+      font-weight: 300;
+      font-size: clamp(15px, 1.36vw, 26px);
+    }
+
+    /* 3. Philosophy */
+    .philosophy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--header-h) 5.6vw;
+    }
+    .philosophy h2 {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: var(--fs-h2);
+      line-height: 1.11;
+    }
+    .philosophy .copy { margin-top: 5.6vw; }
+    .philosophy p {
+      font-size: var(--fs-body);
+      line-height: 1.16;
+      letter-spacing: .015em;
+    }
+    .philosophy p + p { margin-top: 1.1em; }
+
+    /* 4. Scottish Highlands */
+    .highlands {
+      display: grid;
+      grid-template-columns: 25fr 16.8fr 50fr;
+      grid-template-rows: 1fr auto;
+      column-gap: 1.15vw;
+      padding: calc(var(--header-h) + 2.2vw) 3vw 4.1vw;
+    }
+    .highlands .site {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      min-height: 360px;
+    }
+    .highlands .landscape {
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+      align-self: start;
+      width: 17.3vw;
+      aspect-ratio: 332 / 207;
+      margin-top: -.5vw;
+    }
+    .highlands .photo {
+      grid-column: 2;
+      grid-row: 2;
+      aspect-ratio: 323 / 484;
+      margin-top: 6vw;
+    }
+    .highlands .text {
+      grid-column: 3;
+      grid-row: 2;
+      align-self: end;
+      padding-left: 1.4vw;
+    }
+    .highlands h2,
+    .inn h2 {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: var(--fs-h2);
+      line-height: 1;
+    }
+    .highlands .text p,
+    .inn p {
+      font-size: var(--fs-body);
+      line-height: 1.38;
+      letter-spacing: -.012em;
+    }
+    .highlands h2 { margin-bottom: 1.9vw; }
+    .highlands .text p + p { margin-top: 1.38em; }
+
+    .caption {
+      position: absolute;
+      left: 1.2em;
+      bottom: 1em;
+      font-family: var(--f-sans);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 1px 6px rgba(0,0,0,.5);
+    }
+
+    /* 5. Inn */
+    .inn {
+      display: grid;
+      grid-template-columns: 1fr 21.7vw;
+      column-gap: 4vw;
+      padding: var(--header-h) 3.75vw 4.6vw 3.2vw;
+    }
+    .inn .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      max-width: 1000px;
+    }
+    .inn h2 { margin-bottom: 6.6vw; }
+    .inn h3 {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: var(--fs-h3);
+      line-height: 1;
+      margin-bottom: 1.5vw;
+    }
+    .inn h3 .num { margin-right: .35em; }
+    .inn .item + .item { margin-top: 4.2vw; }
+    .inn .images {
+      display: flex;
+      flex-direction: column;
+      gap: 1.45vw;
+    }
+    .inn .images .media { aspect-ratio: 416 / 305; }
+    .inn .engraving img { filter: grayscale(1) sepia(.35) contrast(1.05); }
+
+    /* ---------- Scroll reveal ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 1s var(--ease), transform 1s var(--ease);
+      transition-delay: var(--d, 0s);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    .hero .media { transform: scale(1.08); transition: transform 2.4s var(--ease); }
+    .hero.is-visible .media { transform: scale(1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal, .hero .media { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ---------- Tablet / Mobile ---------- */
+    @media (max-width: 900px) {
+      :root { --header-h: 72px; --gutter: 16px; }
+      .site-header { grid-template-columns: auto 1fr auto; column-gap: 12px; }
+      .brand .brand-name { display: none; }
+      .brand svg { width: 14px; height: 22px; }
+      .logo-display { font-size: 30px; }
+      .logo-serif { font-size: 28px; }
+
+      .intro .media { width: min(78vw, 420px); }
+
+      .hero { padding: 0 16px 56px; }
+      .hero p { margin-top: 16px; }
+
+      .philosophy { padding: calc(var(--header-h) + 40px) 16px 64px; }
+      .philosophy .copy { margin-top: 36px; }
+
+      .highlands,
+      .inn {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: calc(var(--header-h) + 16px) 16px 64px;
+      }
+      .highlands .site { min-height: 0; aspect-ratio: 4 / 3; order: 3; }
+      .highlands .landscape { width: 60%; margin: 0; order: 4; align-self: flex-end; }
+      .highlands .photo { margin: 0; width: 70%; order: 2; }
+      .highlands .text { padding: 0; order: 1; margin-bottom: 12px; }
+      .highlands h2 { margin-bottom: 20px; }
+
+      .inn h2 { margin-bottom: 40px; }
+      .inn h3 { margin-bottom: 12px; }
+      .inn .item + .item { margin-top: 36px; }
+      .inn .images { gap: 16px; margin-top: 24px; }
+    }
+  </style>
+</head>
+<body data-section="intro">
+
+  <header class="site-header">
+    <a class="brand" href="#intro" aria-label="Johnnie Walker">
+      <span class="brand-name">Johnnie Walker.</span>
+      <!-- 임시 아이콘: 공식 Striding Man 로고 SVG로 교체하세요 -->
+      <svg viewBox="0 0 20 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+        <circle cx="11" cy="3.2" r="2.2" fill="currentColor" stroke="none"/>
+        <path d="M10.5 6.5 9 15M9.5 8.5l5 2.5M9.5 8.5 5 12M9 15l4.5 4 1 7M9 15l-3.5 5-4 3"/>
+      </svg>
+    </a>
+
+    <a class="logo" href="#intro" aria-label="The Walker's">
+      <span class="logo-display">THE WALKER’S</span>
+      <span class="logo-serif" aria-hidden="true">THE WALKERS</span>
+    </a>
+
+    <a class="book" href="#">Book Now</a>
+  </header>
+
+  <main>
+    <!-- 1. Intro -->
+    <section id="intro" class="section intro" data-section="intro">
+      <figure class="media reveal" style="margin:0">
+        <!-- MOCK: 라운지 인테리어 이미지 (564 x 750) -->
+        <img src="https://picsum.photos/seed/walkers-lounge/1128/1500" alt="The Walker's lounge interior with a floating staircase and sunken sofa">
+      </figure>
+    </section>
+
+    <!-- 2. Hero -->
+    <section id="hero" class="section hero" data-section="hero">
+      <div class="media">
+        <!-- MOCK: 호숫가 호텔 외관 이미지 (1920 x 1080) -->
+        <img src="https://picsum.photos/seed/walkers-lodge/1920/1080" alt="The Walker's lodge beside a loch in the Highlands">
+      </div>
+      <h1 class="reveal">
+        <span class="l1">A SIP OF</span>
+        <span class="l2">THE LANDSCAPE</span>
+      </h1>
+      <p class="reveal" style="--d:.2s">What you taste when you raise the glass is the extraordinary landscape of that nation.</p>
+    </section>
+
+    <!-- 3. Philosophy -->
+    <section id="philosophy" class="section philosophy" data-section="philosophy">
+      <h2 class="reveal">For years,<br>Johnnie Walker has said one thing : Keep walking.</h2>
+      <div class="copy">
+        <p class="reveal" style="--d:.15s">To keep moving forward.<br>
+          And to pause, to find your own pace and notice where you are.<br>
+          Both are part of the journey.</p>
+        <p class="reveal" style="--d:.3s">Hiking is a journey at your own pace.<br>
+          Walking through open landscape, travellers come face to face with their own tastes, their temperament, and the way they live.</p>
+      </div>
+    </section>
+
+    <!-- 4. Scottish Highlands -->
+    <section id="highlands" class="section highlands" data-section="highlands">
+      <figure class="media site reveal" style="margin:0">
+        <!-- MOCK: 사이트(대지) 이미지 -->
+        <img src="https://picsum.photos/seed/walkers-site/962/1596?grayscale" alt="Site of The Walker's" loading="lazy">
+        <figcaption class="caption">Site</figcaption>
+      </figure>
+
+      <figure class="media landscape reveal" style="margin:0; --d:.15s">
+        <!-- MOCK: 풍경 이미지 -->
+        <img src="https://picsum.photos/seed/walkers-glen/664/414" alt="Highland landscape" loading="lazy">
+        <figcaption class="caption">Landscape</figcaption>
+      </figure>
+
+      <figure class="media photo reveal" style="margin:0; --d:.1s">
+        <!-- MOCK: 해안 절벽에 앉은 하이커 이미지 (323 x 484) -->
+        <img src="https://picsum.photos/seed/walkers-cliff/646/968" alt="A hiker resting on a sea cliff in the Highlands" loading="lazy">
+      </figure>
+
+      <div class="text">
+        <h2 class="reveal">Scottish Highlands</h2>
+        <p class="reveal" style="--d:.15s">The Scottish Highlands, stretching across the northwest of Scotland, are a region where vast natural landscapes, centuries-old whisky-making traditions, and a rich cultural heritage come together. With its rugged mountains and sweeping glens, the region has become a popular destination for hiking and road trips, attracting visitors from around the world.</p>
+        <p class="reveal" style="--d:.3s">This setting offers an opportunity to bring Johnnie Walker’s philosophy of “Keep Walking” to life through a journey of exploration and discovery. Walking through the Highlands and taking time to unwind amidst its natural beauty allows visitors to step away from everyday life, reconnect with themselves, and find inspiration for the journey ahead.</p>
+      </div>
+    </section>
+
+    <!-- 5. Inn -->
+    <section id="inn" class="section inn" data-section="inn">
+      <div class="text">
+        <h2 class="reveal">Inn, a home on the way</h2>
+
+        <div class="item">
+          <h3 class="reveal"><span class="num">01</span> A Node</h3>
+          <p class="reveal" style="--d:.15s">In eighteenth-century Britain, inns were the nodes that broke a journey into stages.<br>
+            The Walker’s is the node between three trails, and it breaks the day into five stages.</p>
+        </div>
+
+        <div class="item">
+          <h3 class="reveal"><span class="num">02</span> A Home</h3>
+          <p class="reveal" style="--d:.15s">An inn was built to make travellers feel at home: good food, good drink and a comfortable bed.<br>
+            The Walker’s arranges all three around one goal — the best glass of the day.</p>
+        </div>
+      </div>
+
+      <div class="images">
+        <figure class="media engraving reveal" style="margin:0">
+          <!-- MOCK: 18세기 여관 판화 이미지 (416 x 305) -->
+          <img src="https://picsum.photos/seed/walkers-old-inn/832/610" alt="Engraving of an eighteenth-century coaching inn" loading="lazy">
+        </figure>
+        <figure class="media reveal" style="margin:0; --d:.15s">
+          <!-- MOCK: 호텔 객실/다이닝 이미지 (416 x 305) -->
+          <img src="https://picsum.photos/seed/walkers-room/832/610" alt="A room at The Walker's" loading="lazy">
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // 이미지 로드 실패 시 깨진 아이콘 대신 회색 박스만 보이게
+    document.querySelectorAll('.media img').forEach((img) => {
+      const markBroken = () => img.classList.add('is-broken');
+      if (img.complete && img.naturalWidth === 0) markBroken();
+      else img.addEventListener('error', markBroken);
+    });
+
+    // 스크롤 시 요소 등장
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal, .hero').forEach((el) => io.observe(el));
+
+    // 헤더 아래에 있는 섹션을 body[data-section]에 기록 → 헤더 배경/로고 전환
+    const header = document.querySelector('.site-header');
+    const sections = [...document.querySelectorAll('[data-section].section')];
+    let ticking = false;
+    function updateSection() {
+      const y = header.offsetHeight / 2;
+      const current = sections.find((s) => {
+        const r = s.getBoundingClientRect();
+        return r.top <= y && r.bottom > y;
+      });
+      if (current) document.body.dataset.section = current.dataset.section;
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(updateSection); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', updateSection);
+    updateSection();
+  </script>
+</body>
+</html>
