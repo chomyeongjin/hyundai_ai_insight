@@ -64,7 +64,8 @@
       background: var(--paper);
       transition: background-color .4s var(--ease);
     }
-    body[data-section="hero"] .site-header { background: transparent; }
+    body[data-section="hero"] .site-header,
+    body[data-section="closing"] .site-header { background: transparent; }
 
     .brand {
       justify-self: start;
@@ -340,6 +341,26 @@
     }
     .invitation .media { aspect-ratio: 588 / 822; }
 
+    /* 8. Walk · Stay · Continue */
+    .closing {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      padding: 0 5%;
+      background: var(--placeholder);
+      overflow: hidden;
+    }
+    .closing .media { position: absolute; inset: 0; background: none; }
+    .closing .word {
+      position: relative;
+      text-align: center;
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: clamp(24px, 1.75vw, 34px);
+      line-height: 1;
+      letter-spacing: .01em;
+    }
+
     /* ---------- Scroll reveal ---------- */
     .reveal {
       opacity: 0;
@@ -399,6 +420,8 @@
       .invitation h2 { margin-bottom: 16px; }
       .invitation p { padding-left: 0; }
       .invitation .media { width: 80%; align-self: flex-end; margin-top: 24px; }
+
+      .closing { grid-template-columns: 1fr; align-content: center; row-gap: 56px; }
     }
   </style>
 </head>
@@ -546,6 +569,16 @@
         <!-- MOCK: 블루라벨 보틀 & 글라스 이미지 (588 x 822) -->
         <img src="https://picsum.photos/seed/walkers-bluelabel/1176/1644" alt="A bottle of Johnnie Walker Blue Label and a glass on a velvet sofa" loading="lazy">
       </figure>
+    </section>
+
+    <!-- 8. Walk · Stay · Continue (Figma: home3) -->
+    <section id="closing" class="section closing" data-section="closing">
+      <!-- 배경 이미지가 생기면 아래 주석을 풀고 src만 교체하세요. 지금은 시안처럼 회색 배경입니다.
+      <div class="media"><img src="" alt="" loading="lazy"></div>
+      -->
+      <p class="word reveal">Walk</p>
+      <p class="word reveal" style="--d:.15s">Stay</p>
+      <p class="word reveal" style="--d:.3s">Continue</p>
     </section>
   </main>
 
