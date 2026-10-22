@@ -191,8 +191,11 @@ async def solve_openai(messages: list[dict[str, Any]]):
         yield sse("error", "API 키가 올바르지 않습니다. OPENAI_API_KEY를 확인해 주세요.")
     except openai.NotFoundError:
         yield sse("error", f"모델 '{OPENAI_MODEL}'을(를) 사용할 수 없습니다. OPENAI_MODEL 값을 확인해 주세요.")
-    except openai.RateLimitError:
-        yield sse("error", "요청이 너무 많거나 크레딧이 부족합니다. 잠시 후 다시 시도하거나 결제 상태를 확인해 주세요.")
+    except openai.RateLimitError as e:
+        if e.code == "insufficient_quota":
+            yield sse("error", "OpenAI API 크레딧이 없습니다. platform.openai.com의 Billing에서 크레딧을 충전해 주세요.")
+        else:
+            yield sse("error", f"요청이 너무 많습니다. 잠시 후 다시 시도해 주세요. ({e.message})")
     except openai.BadRequestError as e:
         yield sse("error", f"잘못된 요청입니다 (모델: '{OPENAI_MODEL}'): {e.message}")
     except openai.APIStatusError as e:
