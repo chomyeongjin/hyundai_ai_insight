@@ -27,6 +27,24 @@ uvicorn app:app --reload --port 8000
 
 브라우저에서 http://localhost:8000 을 열면 됩니다.
 
+### GPT(OpenAI) API 키로 실행하기
+
+`OPENAI_API_KEY`가 설정되어 있으면 자동으로 GPT를 사용합니다.
+
+```bash
+export OPENAI_API_KEY=sk-...          # Windows PowerShell: $env:OPENAI_API_KEY="sk-..."
+export OPENAI_MODEL=gpt-5.5           # 선택 사항 (기본값 gpt-5.5)
+uvicorn app:app --reload --port 8000
+```
+
+내 키로 쓸 수 있는 모델 목록 확인:
+
+```bash
+python -c "from openai import OpenAI; print(sorted(m.id for m in OpenAI().models.list()))"
+```
+
+두 키가 모두 있을 때 강제로 고르려면 `PROVIDER=openai` 또는 `PROVIDER=anthropic`을 지정합니다. GPT 모드에서는 '생각 과정' 토글이 표시되지 않습니다.
+
 API 키는 https://console.anthropic.com 에서 발급받을 수 있습니다.
 
 ## 구조
