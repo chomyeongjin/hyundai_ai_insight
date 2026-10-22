@@ -15,7 +15,7 @@ from pydantic import BaseModel
 # PROVIDER를 지정하지 않으면 OPENAI_API_KEY가 있을 때 GPT, 없으면 Claude를 사용
 PROVIDER = os.getenv("PROVIDER") or ("openai" if os.getenv("OPENAI_API_KEY") else "anthropic")
 MODEL = "claude-opus-5-5"
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.5")
+OPENAI_MODEL = (os.getenv("OPENAI_MODEL") or "gpt-5.5").strip()
 STATIC_DIR = Path(__file__).parent / "static"
 
 # 시스템 프롬프트는 대화 중 절대 바꾸지 않는다 (프롬프트 캐시 + thinking 블록 유효성 유지).
@@ -41,6 +41,7 @@ CATEGORY_LABELS = {
     "embedded": "임베디드",
 }
 
+print(f"[호두] provider={PROVIDER}, model={OPENAI_MODEL if PROVIDER == 'openai' else MODEL}")
 client = anthropic.AsyncAnthropic() if PROVIDER == "anthropic" else None
 openai_client = openai.AsyncOpenAI() if PROVIDER == "openai" else None
 app = FastAPI(title="호두 문제풀이")
@@ -193,7 +194,7 @@ async def solve_openai(messages: list[dict[str, Any]]):
     except openai.RateLimitError:
         yield sse("error", "요청이 너무 많거나 크레딧이 부족합니다. 잠시 후 다시 시도하거나 결제 상태를 확인해 주세요.")
     except openai.BadRequestError as e:
-        yield sse("error", f"잘못된 요청입니다: {e.message}")
+        yield sse("error", f"잘못된 요청입니다 (모델: '{OPENAI_MODEL}'): {e.message}")
     except openai.APIStatusError as e:
         yield sse("error", f"API 오류({e.status_code}): {e.message}")
     except openai.APIConnectionError:
