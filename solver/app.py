@@ -8,7 +8,7 @@ from typing import Any, Literal
 import anthropic
 import openai
 from fastapi import FastAPI
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -200,9 +200,7 @@ async def solve_openai(messages: list[dict[str, Any]]):
         yield sse("error", "OpenAI API에 연결할 수 없습니다. 네트워크를 확인해 주세요.")
 
 
-@app.get("/")
-async def index() -> FileResponse:
-    return FileResponse(STATIC_DIR / "index.html")
-
-
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+# index.html이 style.css, app.js를 상대 경로로 불러오므로 루트에서도 정적 파일을 제공한다.
+# (API 경로가 먼저 등록되어 있어 /api/... 요청은 영향받지 않음)
+app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="root")
