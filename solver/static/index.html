@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>호두 문제풀이</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌰</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 사이드바 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="workspace">
+        <span class="workspace-icon">🌰</span>
+        <span class="workspace-name">호두의 문제풀이</span>
+        <button class="icon-btn" id="collapseBtn" title="사이드바 닫기">«</button>
+      </div>
+
+      <div class="side-search">
+        <span class="side-icon">🔍</span>
+        <input id="searchInput" type="text" placeholder="검색" autocomplete="off">
+        <kbd>Ctrl K</kbd>
+      </div>
+      <button class="side-item" id="newPageBtn"><span class="side-icon">＋</span>새 문제</button>
+
+      <div class="side-section">분야</div>
+      <div id="categoryList"></div>
+
+      <div class="side-section">문제 페이지</div>
+      <div id="pageList" class="page-list"></div>
+    </aside>
+
+    <!-- 메인 -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="openSidebarBtn" title="사이드바 열기">☰</button>
+        <div class="breadcrumb" id="breadcrumb">호두의 문제풀이</div>
+        <div class="topbar-right" id="topbarStatus"></div>
+      </header>
+
+      <div class="scroller" id="scroller">
+        <article class="page" id="page">
+          <div class="page-icon" id="pageIcon">🧠</div>
+          <h1 class="page-title" id="pageTitle" contenteditable="true" data-placeholder="제목 없음" spellcheck="false"></h1>
+
+          <div class="props">
+            <div class="prop">
+              <div class="prop-label"><span>◉</span>분야</div>
+              <div class="prop-value">
+                <div class="select" id="categorySelect"></div>
+              </div>
+            </div>
+            <div class="prop">
+              <div class="prop-label"><span>◷</span>생성일</div>
+              <div class="prop-value muted" id="createdAt"></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+
+          <div id="empty" class="empty">
+            <p class="muted">아래에 문제를 입력하거나, 예시 문제로 시작해 보세요.</p>
+            <div id="examples"></div>
+          </div>
+
+          <div id="turns"></div>
+
+          <!-- 입력창 -->
+          <div class="composer" id="composer">
+            <div class="attachments" id="attachments"></div>
+            <textarea id="questionInput" rows="1" placeholder="문제를 입력하세요… 이미지(회로도 등)는 붙여넣기/끌어놓기도 됩니다. (Ctrl+Enter로 풀이 요청)"></textarea>
+            <div class="composer-bar">
+              <label class="ghost-btn" title="이미지 첨부">
+                📎 이미지
+                <input type="file" id="fileInput" accept="image/png,image/jpeg,image/gif,image/webp" multiple hidden>
+              </label>
+              <div class="spacer"></div>
+              <button class="primary-btn" id="sendBtn">풀이 요청</button>
+              <button class="ghost-btn" id="stopBtn" hidden>■ 중지</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
